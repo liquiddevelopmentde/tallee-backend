@@ -1,0 +1,17 @@
+name: Pull Request Pipeline
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test code
+        run: echo "Running tests..."
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint code
+        run: echo "Linting code..."

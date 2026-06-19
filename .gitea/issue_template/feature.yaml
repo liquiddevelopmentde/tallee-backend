@@ -1,0 +1,36 @@
+name: Feature
+about: Erstelle ein Feature-Ticket
+labels: 'Task/Feature'
+title: ''
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Beschreibung
+      description: Ausführliche Erläuterung der vorgeschlagenen Funktion
+      placeholder: |
+        - Welchen Zweck erfüllt das Feature?
+        - Welches Problem löst das Feature?
+        - Wer profitiert davon? 
+        - Warum ist es wichtig?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Vorgeschlagene Lösung
+      description: Beschreibe, wie das Feature funktionieren soll
+      placeholder: |
+        - Neues Modul, das folgendermaßen aussieht ...
+        - Neue Route, die folgende Aufgabe erfüllt
+        - Neue Funktionsweise von Komponente XY
+
+  - type: textarea
+    attributes:
+      label: Zugehörige Issues
+      description: Links zu verwandten oder blockierenden Issues
+      placeholder: |
+        - Knüpft an Issue #35 an
+        - Ersetzt Issue #12
+        - Brauch Implementierung von #43
