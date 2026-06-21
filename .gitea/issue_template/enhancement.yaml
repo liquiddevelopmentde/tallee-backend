@@ -1,0 +1,36 @@
+name: Enhancement
+about: Erstelle ein Enhancement-Ticket
+labels: 'Task/Enhancement'
+title: ''
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Aktuelles Verhalten
+      description: Beschreibe, wie die Funktionalität aktuell gestaltet ist
+      placeholder: |
+        - Aktuell macht Button X folgendes ...
+        - Das Problem ist, dass ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Vorgeschlagene Verbesserung
+      description: Beschreibe, wie das Problem bzw. die Einschränkung verbessert werden kann
+      placeholder: |
+        - Button X ändern, sodass ...
+        - Funktion X so erweitern, dass ...
+        - Design anpassen, sodass ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Zugehörige Issues
+      description: Links zu verwandten oder blockierenden Issues
+      placeholder: |
+        - Knüpft an Issue #35 an
+        - Ersetzt Issue #12
+        - Brauch Implementierung von #43

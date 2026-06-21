@@ -1,0 +1,20 @@
+name: Push Pipeline
+
+on:
+  push:
+    branches:
+      - "development"
+      - "main"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test code
+        run: echo "Running tests..."
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Format code
+        run: echo "Formatting code..."
