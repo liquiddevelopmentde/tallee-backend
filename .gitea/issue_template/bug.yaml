@@ -1,0 +1,44 @@
+name: Bug Report
+about: Erstelle eine Bug Report
+labels: 'Task/Bug'
+title: ''
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Beschreibung
+      description: Beschreibe klar und pregnant das Fehlerverhalten
+      placeholder: |
+        - Was genau ist das unerwünschte Verhalten?
+        - Welche Auswirkungen hat der Fehler?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Beschreibe, wie der Fehler reproduziert werden kann
+      placeholder: |
+        - 1. Schritt 1  
+        - 2. Schritt 2  
+        - 3. ...
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Lösungsidee
+      description: Beschreibe, wie das Problem bzw. gelöst werden kann
+      placeholder: |
+        - Button X ändern, sodass ...
+        - Funktion X so erweitern, dass ...
+        - Design anpassen, sodass ...
+
+  - type: textarea
+    attributes:
+      label: Verwandte Issues
+      description: Verweise auf ähnliche Issues oder PRs
+      placeholder: |
+        - Knüpft an Issue #35 an
+        - Ersetzt Issue #12
+        - Brauch Implementierung von #43
