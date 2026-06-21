@@ -1,0 +1,47 @@
+name: Pull Request
+about: Vorlage für Pull Requests
+title: "WIP: [Name des Issues]"
+
+body:
+  - type: input
+    id: related_issue
+    attributes:
+      label: Zugehörige Issue(s)
+      description: Issues welche mit diesem Pull Request geschlossen werden sollen
+      placeholder: "Closes #123"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Beschreibung
+      description: |
+        Eine klare und prägnante Zusammenfassung aller vorgenommenen Änderungen.
+      placeholder: |
+        Was wurde geändert?
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes
+    attributes:
+      label: Änderungen
+      description: Liste alle Änderungen detailiert auf, die in diesem Pull Request vorgenommen wurden.
+      placeholder: |
+        - Neue Funktion X hinzugefügt
+        - Bug in Komponente X behoben
+        - Modul X für bessere Leistung refactored
+        - Dependencies aktualisiert
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: Zusätzliche Anmerkungen
+      description: |
+        Gibt es zusätzlichen Kontext, Einschränkungen oder Informationen,
+        die Reviewer wissen sollten?
+      placeholder: |
+        - Bekannte Einschränkungen
+        - Offene TODOs
+        - Hinweise für Reviewer
