@@ -3,11 +3,11 @@ services:
     build: .
     ports:
       - "8000:8000"
-    restart: unless-stopped
-    environment:
-      CORS_ORIGINS: "*"
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
+    volumes:
+      # Mount the local app directory for live-reloading during development
+      - ./app:/app/app
+      # Mount the locally generated SSL certificates for development
+      - ./dev-cert.pem:/app/dev-cert.pem
+      - ./dev-key.pem:/app/dev-key.pem
+    # Run uvicorn with SSL arguments and hot-reloading for development
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 --ssl-keyfile=dev-key.pem --ssl-certfile=dev-cert.pem
