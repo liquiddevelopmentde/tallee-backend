@@ -1,9 +1,10 @@
 # Tallee Backend
 
 A simple, short-lived relay service for sharing tallee match data between devices. An app can upload a match and get back a 6-character code. Other devices can use this code to download the match data. Data is automatically deleted after 10 minutes.
-## Local Development
 
-To run the server on your local machine, you'll need `Docker and `mkcert`.
+## Local Environment
+
+To run the server on your local machine, you'll need [Docker](https://docs.docker.com/get-docker/).
 
 **1. First-Time Setup: Create a local SSL certificate**
 
@@ -28,20 +29,20 @@ These `.pem` files are listed in `.gitignore` and will not be committed.
 **2. Run the Server**
 
 ```sh
-docker-compose up
+docker compose up
 ```
 
 The API will be running at `https://localhost:8000`. API documentation is available at `https://localhost:8000/docs`.
 
 ---
 
-## Production Deployment
+## Production Environment
 
 The production environment uses a separate compose file and runs behind a reverse proxy (like Nginx, Caddy, or Traefik) that handles SSL.
 
 On your server, run the following command:
 ```sh
-docker-compose -f docker-compose.prod.yml up --build -d
+docker compose -f docker-compose.prod.yml up --build -d
 ```
 
 The `docker-compose.prod.yml` file runs the app without SSL, as it expects the reverse proxy to terminate the TLS connection.
