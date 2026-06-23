@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: python:3.13-slim
+    container: nikolaik/python-nodejs:python3.13-nodejs22-slim
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -19,7 +19,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    container: python:3.13-slim
+    container: nikolaik/python-nodejs:python3.13-nodejs22-slim
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
