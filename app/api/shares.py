@@ -37,7 +37,7 @@ async def create_share(
     payload: SharePayload = Body(
         ...,
         # A single shared match plus the entities it references (game, group,
-        # players). Same top-level shape as the app's full export, filtered to
+        # players). The same top-level shape as the app's full export, filtered to
         # one match and without `statistics`. The server treats this opaquely —
         # IDs are sender-local join keys that the receiver remaps on import.
         examples=[
