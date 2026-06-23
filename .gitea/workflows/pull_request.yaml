@@ -13,11 +13,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
       - name: Run tests
-        run: pytest
+        run: uvx --with-requirements requirements.txt pytest
 
   lint:
     runs-on: ubuntu-latest
