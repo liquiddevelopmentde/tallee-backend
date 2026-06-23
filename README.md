@@ -1,19 +1,23 @@
-# tallee Match-Sharing API
+# Tallee Backend
 
 A simple, short-lived relay service for sharing tallee match data between devices. An app can upload a match and get back a 6-character code. Other devices can use this code to download the match data. Data is automatically deleted after 10 minutes.
-
----
-
 ## Local Development
 
-To run the server on your local machine, you'll need Docker and `mkcert` installed.
+To run the server on your local machine, you'll need `Docker and `mkcert`.
 
 **1. First-Time Setup: Create a local SSL certificate**
 
 This is required for the mobile apps to connect to your local server over HTTPS.
 
+First, install `mkcert` if you don't have it. On macOS with [Homebrew](https://brew.sh/):
 ```sh
-# Install a local Certificate Authority in your system's trust stores
+brew install mkcert
+```
+For other platforms, see the [mkcert installation guide](https://github.com/FiloSottile/mkcert#installation).
+
+Once `mkcert` is installed, you can create the local certificate:
+```sh
+# Create and install a local Certificate Authority in your system's trust stores
 mkcert -install
 
 # Generate the certificate files in the project root
