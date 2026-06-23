@@ -28,4 +28,4 @@ jobs:
         run: pip install ruff
 
       - name: Analyze Formatting
-        run: ruff check
+        run: uvx ruff check
