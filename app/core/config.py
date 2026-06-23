@@ -8,9 +8,10 @@ box with the in-memory store and no external dependencies.
 from __future__ import annotations
 
 from functools import lru_cache
+from typing import Annotated
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 # Hard ceiling for how long a share may live on the server.
 MAX_TTL_SECONDS = 600
@@ -27,7 +28,7 @@ class Settings(BaseSettings):
     max_payload_bytes: int = Field(default=256 * 1024, ge=1)
 
     # CORS origins allowed to call the API, "*" allows any.
-    cors_origins: list[str] = Field(default_factory=lambda: ["*"])
+    cors_origins: Annotated[list[str], NoDecode] = Field(default_factory=lambda: ["*"])
 
     # Rate limits
     rate_limit_create: str = "20/minute"
