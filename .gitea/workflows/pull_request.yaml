@@ -7,11 +7,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Test code
-        run: echo "Running tests..."
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+
+      - name: Run tests
+        run: pytest
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Lint code
-        run: echo "Linting code..."
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+
+      - name: Analyze Formatting
+        run: uvx ruff check
