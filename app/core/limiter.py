@@ -1,7 +1,8 @@
-"""Shared rate limiter instance.
+"""
+Shared rate limiter instance.
 
-Lives in its own module so both the app setup (``main``) and the routers can
-import it without a circular import.
+Lives in its own module so both the app setup (main.py)
+and the routers can import it without a circular import.
 """
 
 from slowapi import Limiter
