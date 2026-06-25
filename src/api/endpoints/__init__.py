@@ -1,7 +1,7 @@
 """
 HTTP route definitions, one module per resource.
 
-api_router aggregates every resource router so main mounts a single one.
+router aggregates every resource router so main mounts a single one.
 """
 
 from fastapi import APIRouter
@@ -9,6 +9,6 @@ from fastapi import APIRouter
 from . import health
 from . import shares
 
-api_router = APIRouter()
-api_router.include_router(health.router)
-api_router.include_router(shares.router)
+router = APIRouter()
+router.include_router(health.router)
+router.include_router(shares.router)
