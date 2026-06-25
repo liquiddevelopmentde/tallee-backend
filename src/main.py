@@ -3,8 +3,9 @@ from __future__ import annotations
 import config
 
 from api import handlers
+from api import limiter
+
 from contextlib import asynccontextmanager
-from core.limiter import limiter
 from fastapi import FastAPI
 from services import MemoryStore
 
