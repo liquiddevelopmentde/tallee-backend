@@ -8,15 +8,12 @@ and rate limiting, brute-forcing a live token is impractical.
 
 from __future__ import annotations
 
+import config
 import secrets
-
-ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
-TOKEN_LENGTH = 6
-
 
 def new_token() -> str:
     """Return a single random token. No uniqueness guarantee on its own."""
-    return "".join(secrets.choice(ALPHABET) for _ in range(TOKEN_LENGTH))
+    return "".join(secrets.choice(config.TALLEE_SHARE_TOKEN_ALPHABET) for _ in range(config.TALLEE_SHARE_TOKEN_LENGTH))
 
 
 def normalize(token: str) -> str:
@@ -29,4 +26,4 @@ def normalize(token: str) -> str:
 
 def is_valid(token: str) -> bool:
     """True if ``token`` has the right length and only allowed characters."""
-    return len(token) == TOKEN_LENGTH and all(ch in ALPHABET for ch in token)
+    return len(token) == config.TALLEE_SHARE_TOKEN_LENGTH and all(ch in config.TALLEE_SHARE_TOKEN_ALPHABET for ch in token)
