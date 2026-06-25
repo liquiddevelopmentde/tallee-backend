@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import config
 
-from api import limiter
+from ..limits import limiter
 from fastapi import APIRouter
 from fastapi import Request
 from fastapi import Response
