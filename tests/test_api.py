@@ -7,9 +7,9 @@ import asyncio
 import pytest
 from fastapi.testclient import TestClient
 
-from app.core.config import get_settings
-from app.main import app
-from app.services import MemoryStore
+from src.core.config import get_settings
+from src.main import app
+from src.services import MemoryStore
 
 
 @pytest.fixture
