@@ -16,10 +16,10 @@ from slowapi.errors import RateLimitExceeded
 settings: Settings = Settings()
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(api: FastAPI):
     store: MemoryStore = MemoryStore()
     await store.startup()
-    app.state.store = store
+    api.state.store = store
     try:
         yield
     finally:
@@ -27,15 +27,15 @@ async def lifespan(app: FastAPI):
 
 
 def main() -> None:
-    app: FastAPI = FastAPI(
+    api: FastAPI = FastAPI(
         title=config.API_TITLE,
         version=config.API_VERSION,
         summary=config.API_SUMMARY,
         lifespan=lifespan
     )
-    app.state.limiter = limiter
+    api.state.limiter = limiter
 
-    @app.exception_handler(RateLimitExceeded)
+    @api.exception_handler(RateLimitExceeded)
     async def _rate_limit_handler() -> Response:
         """
         Handles rate limit exceptions
@@ -43,7 +43,7 @@ def main() -> None:
         """
         return JSONResponse(status_code=429, content={"detail": "Rate limit exceeded. Try again shortly."})
 
-    @app.middleware("http")
+    @api.middleware("http")
     async def _limit_body_size(request: Request, call_next):
         """
         Rejects requests exceeding the maximum allowed payload size.
