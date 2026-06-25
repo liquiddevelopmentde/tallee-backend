@@ -11,11 +11,11 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Body, Path, Request, Response
 from fastapi.responses import JSONResponse
 
-from ..core import tokens
-from ..core.config import get_settings
-from ..core.limiter import limiter
-from ..schemas import ErrorResponse, SharePayload, ShareCreateResponse, ShareResponse
-from ..services import TokenCollisionError
+from core import tokens
+from core.config import get_settings
+from core.limiter import limiter
+from schemas import ErrorResponse, SharePayload, ShareCreateResponse, ShareResponse
+from services import TokenCollisionError
 
 settings = get_settings()
 router = APIRouter(prefix="/v1/shares", tags=["shares"])
