@@ -3,7 +3,6 @@ from __future__ import annotations
 import config
 
 from contextlib import asynccontextmanager
-from core.config import Settings
 from core.limiter import limiter
 from fastapi import FastAPI
 from fastapi import Request
@@ -12,7 +11,6 @@ from fastapi.responses import JSONResponse
 from services import MemoryStore
 from slowapi.errors import RateLimitExceeded
 
-settings: Settings = Settings()
 
 @asynccontextmanager
 async def lifespan(api: FastAPI):
@@ -56,13 +54,13 @@ def main() -> None:
         content_length = request.headers.get("content-length")
         if content_length is not None:
             try:
-                too_large = int(content_length) > settings.max_payload_bytes
+                too_large = int(content_length) > config.API_REQUEST_MAX_PAYLOAD_BYTES
             except ValueError:
                 too_large = False
             if too_large:
                 return JSONResponse(
                     status_code=413,
-                    content={"detail": f"Payload exceeds {settings.max_payload_bytes} bytes."},
+                    content={"detail": f"Request payload exceeds the maximum allowed size"},
                 )
         return await call_next(request)
 
