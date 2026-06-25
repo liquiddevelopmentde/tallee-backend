@@ -1,9 +1,10 @@
-"""Short, human-friendly share tokens.
+"""
+Short, human-friendly share tokens.
 
 Tokens are what the user reads aloud, types, or encodes in a QR code, so the
-alphabet excludes visually ambiguous characters (0/O, 1/I/L). 6 chars over a
-30-symbol alphabet give ~729 million combinations — combined with the short TTL
-and rate limiting, brute-forcing a live token is impractical.
+alphabet excludes visually ambiguous characters (0/O, 1/I/L).
+
+6 chars over a 31-symbol alphabet allow 887.503.681 unique combinations.
 """
 
 from __future__ import annotations
