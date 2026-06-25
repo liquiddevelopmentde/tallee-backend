@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import config
 
-from .core.config import Settings
-from .core.limiter import limiter
-from .services import MemoryStore
 from contextlib import asynccontextmanager
+from core.config import Settings
+from core.limiter import limiter
 from fastapi import FastAPI
 from fastapi import Request
 from fastapi import Response
 from fastapi.responses import JSONResponse
+from services import MemoryStore
 from slowapi.errors import RateLimitExceeded
-
 
 settings: Settings = Settings()
 

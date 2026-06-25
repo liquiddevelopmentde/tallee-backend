@@ -14,7 +14,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-from ..core import tokens
+from core import tokens
 
 # How many times to retry on a token collision before giving up.
 _MAX_TOKEN_ATTEMPTS = 10
