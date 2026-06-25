@@ -1,7 +1,7 @@
-from . import endpoints
-from . import handlers
 from .limits import limiter
 from .token import Token
+from . import endpoints
+from . import handlers
 
 __all__ = [
     "endpoints",
