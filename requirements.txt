@@ -3,5 +3,6 @@ httpx2
 pydantic
 pydantic-settings
 pytest
+redis
 slowapi
 uvicorn[standard]
