@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import config
 
+from api import endpoints
 from api import handlers
 from api import limiter
 from data import Redis
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,5 +26,6 @@ api: FastAPI = FastAPI(
 )
 
 api.state.limiter = limiter
+api.include_router(endpoints.router)
 handlers.register_exception_handlers(api)
 handlers.register_middleware_handlers(api)
