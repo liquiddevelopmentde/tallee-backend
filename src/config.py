@@ -1,3 +1,12 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+from typing import Optional
+
+REDIS_URL: Optional[str] = os.getenv("REDIS_URL")
+REDIS_PORT: Optional[str] = os.getenv("REDIS_PORT")
+
 API_TITLE: str = "Tallee Match-Sharing Relay"
 API_SUMMARY: str = "Relay for Tallee match data"
 API_VERSION: str = "0.0.1"
