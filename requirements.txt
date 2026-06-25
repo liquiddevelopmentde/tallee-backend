@@ -3,6 +3,7 @@ httpx2
 pydantic
 pydantic-settings
 pytest
+python-dotenv
 redis
 slowapi
 uvicorn[standard]
