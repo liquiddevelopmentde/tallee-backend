@@ -6,11 +6,11 @@ alphabet excludes visually ambiguous characters (0/O, 1/I/L).
 
 6 chars over a 31-symbol alphabet allow 887.503.681 unique combinations.
 """
-
 from __future__ import annotations
 
 import config
 import secrets
+
 
 def new_token() -> str:
     """Return a single random token. No uniqueness guarantee on its own."""
