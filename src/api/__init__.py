@@ -1,6 +1,6 @@
 from . import endpoints
 from . import handlers
-from .limiter import limiter
+from .limits import limiter
 from .token import Token
 
 __all__ = [
