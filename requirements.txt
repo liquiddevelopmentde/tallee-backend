@@ -1,6 +1,5 @@
 fastapi
 httpx2
-limits
 pydantic
 pydantic-settings
 pytest
