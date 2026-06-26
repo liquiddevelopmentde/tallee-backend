@@ -33,6 +33,6 @@ def register_middleware_handlers(api: FastAPI) -> None:
             if too_large:
                 return JSONResponse(
                     status_code=413,
-                    content={"detail": f"Request payload exceeds the maximum allowed size"},
+                    content={"detail": "Request payload exceeds the maximum allowed size"},
                 )
         return await call_next(request)
