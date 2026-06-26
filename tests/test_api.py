@@ -8,8 +8,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 import config
-from data import Entry
 from api.token import Token
+from data import Entry
 
 
 class _InMemoryStore:
