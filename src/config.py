@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
-load_dotenv()
-
 from typing import Optional
+
+load_dotenv()
 
 REDIS_URL: Optional[str] = os.getenv("REDIS_URL")
 REDIS_PORT: Optional[str] = os.getenv("REDIS_PORT")
