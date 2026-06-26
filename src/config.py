@@ -12,6 +12,7 @@ API_SUMMARY: str = "Relay for Tallee match data"
 API_VERSION: str = "0.0.1"
 API_REQUEST_MAX_PAYLOAD_BYTES: int = 256 * 1024  # 256 KB
 API_REQUEST_RATE_LIMIT_CREATE: str = "20/minute"
+API_REQUEST_RATE_LIMIT_HEALTH: str = "120/minute"
 API_REQUEST_RATE_LIMIT_READ: str = "60/minute"
 REDIS_MAX_CONNECTIONS: int = 20
 TALLEE_SHARE_MAX_TTL: int = 60 * 10  # 10 Minutes
