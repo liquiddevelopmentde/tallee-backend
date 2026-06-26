@@ -17,4 +17,4 @@ To reduce transcription errors, the alphabet excludes visually ambiguous charact
 |--------------------------------|-------------------------------------------------|
 | `Token(value: str)`            | Creates a `Token` from an existing string.      |
 | `Token.generate()`             | Generates a new cryptographically random token. |
-| `str(token)` / `token.value()` | Returns the token value as a plain string. |
+| `str(token)` / `token.value()` | Returns the token value as a plain string.      |
