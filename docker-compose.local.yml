@@ -1,0 +1,48 @@
+services:
+  app:
+    build: .
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      # Read-only mount — container cannot write back to the host
+      - ./src:/app:ro,z
+    command: >
+      uvicorn main:api
+      --reload
+      --host 0.0.0.0
+      --port 8000
+    networks:
+      - internal
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.50"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    # Disable RDB snapshots and AOF — pure in-memory, appropriate for
+    # ephemeral short-TTL payloads. !nothing survives a restart!
+    command: redis-server --save "" --appendonly no
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.25"
+    restart: unless-stopped
+
+networks:
+  internal:
+    internal: true
