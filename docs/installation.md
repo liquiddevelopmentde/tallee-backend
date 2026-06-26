@@ -37,3 +37,11 @@ To change any setting without modifying `docker-compose.yml`,
 create a `docker-compose.override.yml` file in the same directory. 
 
 This prevents merge conflicts when updating the server later on.
+
+## Local Development
+
+To run without a reverse proxy, use the provided local compose file which exposes port 8000 directly:
+
+```bash
+docker compose -f docker-compose.local.yml up -d
+```
