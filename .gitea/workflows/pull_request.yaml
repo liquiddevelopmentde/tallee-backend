@@ -25,4 +25,4 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Analyze Formatting
-        run: uvx ruff check app tests
+        run: uvx ruff check src tests
