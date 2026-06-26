@@ -46,8 +46,8 @@ async def create(request: Request, payload: Dict[str, Any] = Body(...)) -> Dict[
 async def get(request: Request, token: str) -> Dict[str, Any]:
     try:
         token: Token = Token(token)
-    except ValueError:
-        raise HTTPException(status_code=404)
+    except ValueError as err:
+        raise HTTPException(status_code=404) from err
 
     store: Store = request.app.state.redis.get()
 
