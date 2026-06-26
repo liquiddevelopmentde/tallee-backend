@@ -18,6 +18,14 @@ docker network create web
 
 ## Starting
 
+Copy the example environment file and adjust if needed:
+
+```bash
+cp .example.env .env
+```
+
+Then start the stack:
+
 ```bash
 docker compose up -d
 ````
