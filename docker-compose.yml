@@ -1,11 +1,12 @@
 services:
   app:
     build: .
+    env_file: .env
     volumes:
       # Read-only mount — container cannot write back to the host
-      - ./api:/app/api:ro
+      - ./src:/app:ro,z
     command: >
-      uvicorn api.main:api
+      uvicorn main:api
       --reload
       --host 0.0.0.0
       --port 8000

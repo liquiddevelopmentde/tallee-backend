@@ -9,7 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source with correct ownership so appuser can read it
-COPY --chown=appuser:appuser src/ ./app
+COPY --chown=appuser:appuser src/ .
 
 USER appuser
 
