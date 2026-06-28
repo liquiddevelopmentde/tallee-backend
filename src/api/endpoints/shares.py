@@ -28,7 +28,7 @@ from typing import Optional
 router: APIRouter = APIRouter(prefix="/v1/shares")
 
 
-@router.post(path="/create", status_code=201)
+@router.post(path="/", status_code=201)
 @limiter.limit(config.API_REQUEST_RATE_LIMIT_CREATE)
 async def create(request: Request, payload: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     store: Store = request.app.state.redis.get()
