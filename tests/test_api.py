@@ -45,7 +45,7 @@ def client():
 
 def _create(client, payload=None):
     payload = payload or {"g": "Catan", "p": [{"n": "Mathis", "s": 10}]}
-    resp = client.post("/v1/shares/create", json=payload)
+    resp = client.post("/v1/shares/", json=payload)
     assert resp.status_code == 201, resp.text
     return resp.json(), payload
 
@@ -91,10 +91,10 @@ def test_malformed_token_is_404(client):
 
 
 def test_non_object_body_is_422(client):
-    assert client.post("/v1/shares/create", json=[1, 2, 3]).status_code == 422
+    assert client.post("/v1/shares/", json=[1, 2, 3]).status_code == 422
 
 
 def test_oversized_payload_is_413(client):
     limit = config.API_REQUEST_MAX_PAYLOAD_BYTES
     big = {"x": "a" * (limit + 10)}
-    assert client.post("/v1/shares/create", json=big).status_code == 413
+    assert client.post("/v1/shares/", json=big).status_code == 413
