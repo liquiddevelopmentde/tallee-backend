@@ -24,6 +24,7 @@ jobs:
         run: pytest
 
   format:
+    needs: test
     runs-on: ubuntu-latest
     container: nikolaik/python-nodejs:python3.13-nodejs22
     steps:
