@@ -6,7 +6,9 @@ __pycache__/
 venv/
 
 # Environment
+.test/
 .env
+docker-compose.override.yml
 
 # IDE
 .idea/

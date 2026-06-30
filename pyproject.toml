@@ -1,19 +1,25 @@
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = [".", "src"]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
     "E",
-    # Pyflakes
     "F",
-    # pyupgrade
     "UP",
-    # flake8-bugbear
     "B",
-    # flake8-simplify
     "SIM",
-    # isort
     "I",
+]
+
+ignore = [
+    "B008",
+    "I001",
+    "UP006",
+    "UP007",
+    "UP035",
+    "UP045",
 ]
