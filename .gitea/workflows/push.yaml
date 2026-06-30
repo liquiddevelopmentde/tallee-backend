@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.BOT_TOKEN }}
-          ref: ${{ gitea.ref_name }}
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -24,15 +21,11 @@ jobs:
         run: pytest
 
   format:
-    needs: test
     runs-on: ubuntu-latest
     container: nikolaik/python-nodejs:python3.13-nodejs22
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.BOT_TOKEN }}
-          ref: ${{ gitea.ref_name }}
 
       - name: Check code format
         id: check_format
