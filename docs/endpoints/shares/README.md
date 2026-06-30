@@ -12,7 +12,7 @@ Creates a new share and returns a [token](/docs/reference/token.md) to retrieve 
 
 ### Request
 
-|                  |                       |
+| Parameter        | Description           |
 |------------------|-----------------------|
 | **Content-Type** | `application/json`    |
 | **Body**         | Any valid JSON object |
@@ -32,13 +32,13 @@ Creates a new share and returns a [token](/docs/reference/token.md) to retrieve 
 | `ttl_seconds` | `integer` | Seconds until the share expires (currently `600`)                                          |
 | `expires_at`  | `string`  | ISO 8601 UTC timestamp of expiry                                                           |
 
-```json
-{
-  "token": "A3KX7M",
-  "ttl_seconds": 600,
-  "expires_at": "2026-06-28T21:00:00+00:00"
-}
-```
+
+### Error responses
+
+| Status                     | Reason                    |
+|----------------------------|---------------------------|
+| `422 Unprocessable Entity` | Payload is not valid JSON |
+| `413 Payload Too Large`    | Payload is too large      |
 
 ---
 
@@ -61,14 +61,6 @@ Retrieves a previously created share by its [token](/docs/reference/token.md).
 |-----------|----------|------------------------------------------|
 | `payload` | `object` | The original JSON object that was stored |
 
-```json
-{
-  "payload": {
-    "players": ["Alice", "Bob"],
-    "scores": [3, 1]
-  }
-}
-```
 
 ### Error responses
 
