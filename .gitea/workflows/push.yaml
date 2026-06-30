@@ -30,13 +30,13 @@ jobs:
       - name: Check code format
         id: check_format
         continue-on-error: true
-        run: ruff check src tests
+        run: uvx ruff check src tests
 
       - name: Format code
         if: steps.check_format.outcome == 'failure'
         run: |
-          ruff check --fix src tests
-          ruff format src tests
+          uvx ruff check --fix src tests
+          uvx ruff format src tests
 
       - name: Commit changes
         env:
@@ -58,4 +58,4 @@ jobs:
           fi
 
       - name: Verify format
-        run: ruff check src tests
+        run: uvx ruff check src tests
