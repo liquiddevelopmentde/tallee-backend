@@ -1,26 +1,51 @@
-"""End-to-end tests for the match-sharing relay (in-memory store)."""
+"""End-to-end tests for the match-sharing relay."""
 
 from __future__ import annotations
 
-import asyncio
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
 
-from app.core.config import get_settings
-from app.main import app
-from app.services import MemoryStore
+import config
+from api.token import Token
+from data import Entry
+
+
+class _InMemoryStore:
+    """Minimal in-memory store used to avoid a real Redis connection in tests."""
+
+    def __init__(self) -> None:
+        self._data: dict[str, str] = {}
+
+    async def add(self, token: Token, payload: str, ttl: int) -> None:
+        self._data[token.value] = payload
+
+    async def get(self, token: Token) -> Entry | None:
+        raw = self._data.get(token.value)
+        return Entry(payload=raw) if raw is not None else None
+
+
+def _make_redis_mock() -> MagicMock:
+    store = _InMemoryStore()
+    mock = MagicMock()
+    mock.connect = AsyncMock()
+    mock.disconnect = AsyncMock()
+    mock.get = MagicMock(return_value=store)
+    return mock
 
 
 @pytest.fixture
 def client():
-    with TestClient(app) as c:
-        yield c
+    with patch("main.Redis", return_value=_make_redis_mock()):
+        from main import api
+        with TestClient(api) as c:
+            yield c
 
 
 def _create(client, payload=None):
     payload = payload or {"g": "Catan", "p": [{"n": "Mathis", "s": 10}]}
-    resp = client.post("/v1/shares", json=payload)
+    resp = client.post("/v1/shares/", json=payload)
     assert resp.status_code == 201, resp.text
     return resp.json(), payload
 
@@ -32,7 +57,7 @@ def test_health(client):
 def test_create_returns_token_and_expiry(client):
     body, _ = _create(client)
     assert len(body["token"]) == 6
-    assert body["ttl_seconds"] == get_settings().ttl_seconds
+    assert body["ttl_seconds"] == config.TALLEE_SHARE_MAX_TTL
     assert "expires_at" in body
 
 
@@ -61,35 +86,15 @@ def test_unknown_token_is_404(client):
 
 
 def test_malformed_token_is_404(client):
-    # Contains excluded chars / wrong length → rejected before hitting the store.
+    # Wrong length → rejected before hitting the store.
     assert client.get("/v1/shares/abc").status_code == 404
 
 
 def test_non_object_body_is_422(client):
-    assert client.post("/v1/shares", json=[1, 2, 3]).status_code == 422
+    assert client.post("/v1/shares/", json=[1, 2, 3]).status_code == 422
 
 
 def test_oversized_payload_is_413(client):
-    limit = get_settings().max_payload_bytes
+    limit = config.API_REQUEST_MAX_PAYLOAD_BYTES
     big = {"x": "a" * (limit + 10)}
-    assert client.post("/v1/shares", json=big).status_code == 413
-
-
-def test_delete_revokes(client):
-    body, _ = _create(client)
-    assert client.delete(f"/v1/shares/{body['token']}").status_code == 204
-    assert client.get(f"/v1/shares/{body['token']}").status_code == 404
-    # Deleting again is a 404.
-    assert client.delete(f"/v1/shares/{body['token']}").status_code == 404
-
-
-def test_memory_store_expiry():
-    async def scenario():
-        store = MemoryStore()
-        record = await store.create({"n": "x"}, ttl_seconds=0)
-        # ttl=0 → already expired; first get returns the (expired) record then drops it.
-        fetched = await store.get(record.token)
-        assert fetched is not None and fetched.is_expired
-        assert await store.get(record.token) is None
-
-    asyncio.run(scenario())
+    assert client.post("/v1/shares/", json=big).status_code == 413

@@ -1,0 +1,28 @@
+name: Pull Request Pipeline
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.13-nodejs22
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest
+
+  lint:
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.13-nodejs22
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Analyze Formatting
+        run: uvx ruff check src tests

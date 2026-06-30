@@ -2,16 +2,18 @@ services:
   app:
     build: .
     env_file: .env
+    ports:
+      - "8000:8000"
     volumes:
       # Read-only mount — container cannot write back to the host
       - ./src:/app:ro,z
     command: >
       uvicorn main:api
+      --reload
       --host 0.0.0.0
       --port 8000
     networks:
-      - internal   # Reaches Redis
-      - web  # Reaches Caddy (different compose)
+      - internal
     depends_on:
       redis:
         condition: service_healthy
@@ -28,7 +30,7 @@ services:
     # ephemeral short-TTL payloads. !nothing survives a restart!
     command: redis-server --save "" --appendonly no
     networks:
-      - internal   # not reachable from Caddy or the host
+      - internal
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -43,8 +45,4 @@ services:
 
 networks:
   internal:
-    internal: true  # Fully isolated. No outbound internet, not reachable from the host
-
-  web:
-    external: true  # Must already exist; created by our central Caddy compose.
-    name: web
+    driver: bridge
