@@ -65,7 +65,7 @@ jobs:
 
   build:
     name: "Build Container"
-    needs: format
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
