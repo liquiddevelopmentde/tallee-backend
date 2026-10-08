@@ -1,0 +1,115 @@
+name: "PR Label Automation"
+on:
+  pull_request:
+    types: [ opened, edited, review_requested, review_request_removed, closed, labeled ]
+  pull_request_review:
+    types: [ submitted ]
+
+jobs:
+  sync-workflow-label:
+    name: "Sync workflow label"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      API: ${{ gitea.server_url }}/api/v1
+      AUTH: 'Authorization: token ${{ secrets.BOT_TOKEN }}'
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      EVENT: ${{ github.event_name }}
+      ACTION: ${{ github.event.action }}
+      ACTOR: ${{ github.actor }}
+      STATE: ${{ github.event.review.type }}
+      MERGED: ${{ github.event.pull_request.merged }}
+      TITLE: ${{ github.event.pull_request.title }}
+    steps:
+      - name: "Update label"
+        run: |
+          set -euo pipefail
+
+          IN_PROGRESS="Workflow/In Progress"
+
+          # Returns 0 if the PR currently carries the "In Progress" label, else 1.
+          has_in_progress() {
+            curl -fsS -H "$AUTH" "$API/repos/$REPO/issues/$PR/labels" \
+              | python3 -c "import sys,json;d=json.load(sys.stdin);exit(0 if any(x['name']=='$IN_PROGRESS' for x in d) else 1)"
+          }
+
+          # Returns 0 if the repo already has a label with the given name, else 1.
+          label_exists() {
+            local page=1 res
+            while :; do
+              res="$(curl -fsS -H "$AUTH" "$API/repos/$REPO/labels?page=$page&limit=50")"
+              printf '%s' "$res" | python3 -c "import sys,json;d=json.load(sys.stdin);exit(0 if any(x['name']=='$1' for x in d) else 1)" && return 0
+              printf '%s' "$res" | python3 -c "import sys,json;exit(0 if json.load(sys.stdin) else 1)" || return 1
+              page=$((page + 1))
+            done
+          }
+
+          # Creates the given label in the repo if it does not exist yet (scoped/exclusive).
+          ensure_label() {
+            label_exists "$1" || \
+              curl -fsS -X POST -H "$AUTH" -H 'Content-Type: application/json' \
+                -d "{\"name\":\"$1\",\"color\":\"#0E8A16\",\"exclusive\":true}" "$API/repos/$REPO/labels"
+          }
+
+          # Keep the "Workflow/In Progress" label and the "WIP:" title prefix in sync.
+          # Only react to manual actions: skip anything triggered by the bot itself,
+          # which also prevents feedback loops between the two directions.
+          BOT="$(curl -fsS -H "$AUTH" "$API/user" | python3 -c 'import sys,json;print(json.load(sys.stdin)["login"])')"
+          if [ "$EVENT" = "pull_request" ] && [ "$ACTOR" != "$BOT" ]; then
+            case "$ACTION" in
+              labeled|label_updated)
+                # Label drives title: someone added "In Progress" -> ensure "WIP:" prefix.
+                if has_in_progress && ! printf '%s' "$TITLE" | grep -qiE '^WIP:'; then
+                  curl -fsS -X PATCH -H "$AUTH" -H 'Content-Type: application/json' \
+                    -d "{\"title\":\"WIP: $TITLE\"}" "$API/repos/$REPO/pulls/$PR"
+                fi ;;
+              edited)
+                # Title drives label: someone added "WIP:" -> ensure "In Progress" label.
+                if printf '%s' "$TITLE" | grep -qiE '^WIP:' && ! has_in_progress; then
+                  ensure_label "$IN_PROGRESS"
+                  curl -fsS -X POST -H "$AUTH" -H 'Content-Type: application/json' \
+                    -d "{\"labels\":[\"$IN_PROGRESS\"]}" "$API/repos/$REPO/issues/$PR/labels"
+                fi ;;
+            esac
+          fi
+
+          # Map the incoming event/action to the single workflow state the PR should have.
+          TARGET=""
+          case "$EVENT" in
+            pull_request)
+              case "$ACTION" in
+                opened)           if printf '%s' "$TITLE" | grep -qiE '^WIP:'; then TARGET="Workflow/In Progress"; else TARGET="Workflow/Ready for Review"; fi ;;
+                review_requested) TARGET="Workflow/Ready for Review" ;;
+                review_request_removed) TARGET="Workflow/In Progress" ;;
+                closed)           if [ "$MERGED" = "true" ]; then TARGET="Workflow/Merged"; else TARGET="Workflow/Abandoned"; fi ;;
+              esac ;;
+            pull_request_review)
+              case "$STATE" in
+                pull_request_review_approved) TARGET="Workflow/Ready for Merge" ;;
+                pull_request_review_rejected) TARGET="Workflow/Revision" ;;
+              esac ;;
+          esac
+
+          # Events that don't map to a state (e.g. edited/labeled) end here.
+          [ -z "$TARGET" ] && { echo "no state change for $EVENT/$ACTION/$STATE"; exit 0; }
+
+          # When a review is requested, drop a leading "WIP:" from the title.
+          if [ "$EVENT" = "pull_request" ] && [ "$ACTION" = "review_requested" ]; then
+            NEW="$(printf '%s' "$TITLE" | sed -E 's/^WIP:[[:space:]]*//I')"
+            [ "$NEW" != "$TITLE" ] && \
+              curl -fsS -X PATCH -H "$AUTH" -H 'Content-Type: application/json' \
+                -d "{\"title\":\"$NEW\"}" "$API/repos/$REPO/pulls/$PR"
+          fi
+
+          # Make sure the target label exists in the repo before assigning it.
+          ensure_label "$TARGET"
+
+          labels=$(curl -fsS -H "$AUTH" "$API/repos/$REPO/issues/$PR/labels")
+
+          # Add the target label if it isn't already set.
+          printf '%s' "$labels" | python3 -c "import sys,json;d=json.load(sys.stdin);exit(0 if any(x['name']=='$TARGET' for x in d) else 1)" || \
+            curl -fsS -X POST -H "$AUTH" -H 'Content-Type: application/json' \
+              -d "{\"labels\":[\"$TARGET\"]}" "$API/repos/$REPO/issues/$PR/labels"
