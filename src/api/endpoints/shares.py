@@ -27,7 +27,6 @@ from typing import Optional
 
 router: APIRouter = APIRouter(prefix="/v1/shares")
 
-DEBUG_TOKEN_VALUE: str = "DEBUGX"
 with open(config.DEBUG_MATCH_FILE, encoding="utf-8") as f:
     DEBUG_MATCH_PAYLOAD: Dict[str, Any] = json.load(f)
 
@@ -37,8 +36,6 @@ with open(config.DEBUG_MATCH_FILE, encoding="utf-8") as f:
 async def create(request: Request, payload: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     store: Store = request.app.state.redis.get()
     token: Token = Token.generate()
-    while token.value == DEBUG_TOKEN_VALUE:
-        token = Token.generate()
     ttl: int = config.TALLEE_SHARE_MAX_TTL
 
     await store.add(token, json.dumps(payload), ttl)
@@ -55,7 +52,7 @@ async def get(request: Request, token: str) -> Dict[str, Any]:
     except ValueError as err:
         raise HTTPException(status_code=404) from err
 
-    if token.value == DEBUG_TOKEN_VALUE:
+    if token.value == config.DEBUG_TOKEN_VALUE:
         return {"payload": DEBUG_MATCH_PAYLOAD}
 
     store: Store = request.app.state.redis.get()

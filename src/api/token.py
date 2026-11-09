@@ -29,19 +29,23 @@ class Token:
 
         object.__setattr__(self, "value", normalized)
 
-    @classmethod
-    def generate(cls) -> Token:
+    @staticmethod
+    def generate() -> Token:
         """
         Generate a new random token.
 
         The returned token is random but not guaranteed to be globally unique.
+        If the reserved debug token is drawn, a different token is drawn instead.
         """
-        return cls(
+        token = Token(
             "".join(
                 secrets.choice(config.TALLEE_SHARE_TOKEN_ALPHABET)
                 for _ in range(config.TALLEE_SHARE_TOKEN_LENGTH)
             )
         )
+        if token.value == config.DEBUG_TOKEN_VALUE:
+            return Token.generate()
+        return token
 
     def __str__(self) -> str:
         return self.value

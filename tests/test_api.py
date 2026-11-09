@@ -98,3 +98,8 @@ def test_oversized_payload_is_413(client):
     limit = config.API_REQUEST_MAX_PAYLOAD_BYTES
     big = {"x": "a" * (limit + 10)}
     assert client.post("/v1/shares/", json=big).status_code == 413
+
+
+def test_generate_never_returns_debug_token():
+    with patch("api.token.secrets.choice", side_effect=[*"DEBUGX", *"AAAAAA"]):
+        assert Token.generate().value == "AAAAAA"
