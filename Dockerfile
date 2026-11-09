@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source with correct ownership so appuser can read it
 COPY --chown=appuser:appuser src/ .
+COPY --chown=appuser:appuser data/ ./data/
 
 USER appuser
 

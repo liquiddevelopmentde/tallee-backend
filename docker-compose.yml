@@ -5,6 +5,7 @@ services:
     volumes:
       # Read-only mount — container cannot write back to the host
       - ./src:/app:ro,z
+      - ./data:/app/data:ro,z
     command: >
       uvicorn main:api
       --host 0.0.0.0

@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "id": "01398dac-0fde-478b-9489-1c303740a894",
+  "name": "Debug Match",
+  "createdAt": "2026-01-01T12:00:00.000Z",
+  "endedAt": "2026-01-01T12:30:00.000Z",
+  "game": {
+    "id": "5bb0914a-a615-4fd6-bfbc-891ec8c451fe",
+    "createdAt": "2026-01-01T12:00:00.000Z",
+    "name": "Debug Game",
+    "ruleset": "highestScore",
+    "description": "Permanent debug match",
+    "color": "orange"
+  },
+  "group": null,
+  "players": [
+    {
+      "id": "0f9ff204-1f67-4cef-9f4f-de172fbbb2d8",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "name": "Felix",
+      "description": "",
+      "deleted": false,
+      "nameCount": 0
+    },
+    {
+      "id": "4252d8a5-f1dd-43e8-a6e2-95aa2a2505d1",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "name": "Mathis",
+      "description": "",
+      "deleted": false,
+      "nameCount": 0
+    },
+    {
+      "id": "b4095d1a-51f3-4f08-b813-55945660260d",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "name": "Yannick",
+      "description": "",
+      "deleted": false,
+      "nameCount": 0
+    }
+  ],
+  "isTeamMatch": false,
+  "teams": null,
+  "scores": {
+    "0f9ff204-1f67-4cef-9f4f-de172fbbb2d8": {
+      "roundNumber": 1,
+      "change": 10
+    },
+    "4252d8a5-f1dd-43e8-a6e2-95aa2a2505d1": {
+      "roundNumber": 1,
+      "change": 8
+    },
+    "b4095d1a-51f3-4f08-b813-55945660260d": {
+      "roundNumber": 1,
+      "change": 12
+    }
+  },
+  "notes": "Permanent debug match for code DEBUGX"
+}
