@@ -14,8 +14,8 @@ from ..token import Token
 from data import Entry
 from data import Store
 from datetime import datetime
-from datetime import timezone
 from datetime import timedelta
+from datetime import UTC
 from fastapi import APIRouter
 from fastapi import Body
 from fastapi import HTTPException
@@ -40,7 +40,7 @@ async def create(request: Request, payload: Dict[str, Any] = Body(...)) -> Dict[
 
     await store.add(token, json.dumps(payload), ttl)
 
-    expires_at: str = (datetime.now(timezone.utc) + timedelta(seconds=ttl)).isoformat()
+    expires_at: str = (datetime.now(UTC) + timedelta(seconds=ttl)).isoformat()
     return {"token": token.value, "ttl_seconds": ttl, "expires_at": expires_at}
 
 
