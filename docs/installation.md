@@ -30,6 +30,13 @@ Then start the stack:
 docker compose up -d
 ````
 
+The `docker-compose.override.yml` is loaded automatically and exposes
+the API on port 8000. Verify with:
+
+```bash
+curl http://localhost:8000/health
+```
+
 
 ## Override File
 

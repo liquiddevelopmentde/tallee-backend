@@ -5,9 +5,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Read-only mount — container cannot write back to the host
+      # Read-only mount — container cannot write back to the host.
+      # NOTE: mount debug fixtures as files, never ./data:/app/data —
+      # that would shadow the `data` Python package and crash imports.
       - ./src:/app:ro,z
-      - ./data:/app/data:ro,z
+      - ./data/debug-match.json:/app/data/debug-match.json:ro,z
+      - ./data/debug-match-group.json:/app/data/debug-match-group.json:ro,z
+      - ./data/debug-match-pairs.json:/app/data/debug-match-pairs.json:ro,z
+      - ./data/debug-match-teams.json:/app/data/debug-match-teams.json:ro,z
     command: >
       uvicorn main:api
       --reload
