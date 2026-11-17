@@ -20,5 +20,11 @@ TALLEE_SHARE_TOKEN_LETTERS: str = "ABCDEFGHJKMNPQRSTUVWXYZ"
 TALLEE_SHARE_TOKEN_NUMBERS: str = "23456789"
 TALLEE_SHARE_TOKEN_ALPHABET: str = TALLEE_SHARE_TOKEN_LETTERS + TALLEE_SHARE_TOKEN_NUMBERS
 TALLEE_SHARE_TOKEN_LENGTH: int = 6  # 6 Characters
+DEBUG_TOKENS: tuple[str, ...] = ("DEBUGX", "GRP222", "PAAR22", "TEAM22")
 DEBUG_TOKEN_VALUE: str = "DEBUGX"
-DEBUG_MATCH_FILE: str = "data/debug-match.json"
+DEBUG_MATCHES: dict[str, str] = {
+    "DEBUGX": "data/debug-match.json",
+    "GRP222": "data/debug-match-group.json",
+    "PAAR22": "data/debug-match-pairs.json",
+    "TEAM22": "data/debug-match-teams.json",
+}

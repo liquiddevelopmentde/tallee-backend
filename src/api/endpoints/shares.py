@@ -27,8 +27,13 @@ from typing import Optional
 
 router: APIRouter = APIRouter(prefix="/v1/shares")
 
-with open(config.DEBUG_MATCH_FILE, encoding="utf-8") as f:
+with open(config.DEBUG_MATCHES["DEBUGX"], encoding="utf-8") as f:
     DEBUG_MATCH_PAYLOAD: Dict[str, Any] = json.load(f)
+
+DEBUG_MATCH_PAYLOADS: Dict[str, Dict[str, Any]] = {}
+for _token_value, _path in config.DEBUG_MATCHES.items():
+    with open(_path, encoding="utf-8") as _f:
+        DEBUG_MATCH_PAYLOADS[_token_value] = json.load(_f)
 
 
 @router.post(path="/", status_code=201)
@@ -52,8 +57,8 @@ async def get(request: Request, token: str) -> Dict[str, Any]:
     except ValueError as err:
         raise HTTPException(status_code=404) from err
 
-    if token.value == config.DEBUG_TOKEN_VALUE:
-        return {"payload": DEBUG_MATCH_PAYLOAD}
+    if token.value in DEBUG_MATCH_PAYLOADS:
+        return {"payload": DEBUG_MATCH_PAYLOADS[token.value]}
 
     store: Store = request.app.state.redis.get()
 
