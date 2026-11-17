@@ -103,3 +103,43 @@ def test_oversized_payload_is_413(client):
 def test_generate_never_returns_debug_token():
     with patch("api.token.secrets.choice", side_effect=[*"DEBUGX", *"AAAAAA"]):
         assert Token.generate().value == "AAAAAA"
+
+
+def test_generate_never_returns_any_reserved_debug_token():
+    for reserved in config.DEBUG_TOKENS:
+        with patch("api.token.secrets.choice", side_effect=[*reserved, *"AAAAAA"]):
+            assert Token.generate().value == "AAAAAA"
+
+
+def _debug_payload(token_value: str):
+    import json
+
+    with open(config.DEBUG_MATCHES[token_value], encoding="utf-8") as f:
+        return json.load(f)
+
+
+def test_debug_token_returns_200_with_correct_data(client):
+    resp = client.get("/v1/shares/DEBUGX")
+    assert resp.status_code == 200
+    assert resp.json()["payload"] == _debug_payload("DEBUGX")
+
+
+@pytest.mark.parametrize("token", ["debugx", "DEBUGX", "dEbUgX"])
+def test_debug_token_is_case_insensitive(client, token):
+    resp = client.get(f"/v1/shares/{token}")
+    assert resp.status_code == 200
+    assert resp.json()["payload"] == _debug_payload("DEBUGX")
+
+
+@pytest.mark.parametrize("token", ["DEBUGX", "GRP222", "PAAR22", "TEAM22"])
+def test_all_debug_tokens_return_their_fixture(client, token):
+    resp = client.get(f"/v1/shares/{token}")
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["payload"] == _debug_payload(token)
+
+
+@pytest.mark.parametrize("token", ["grp222", "paar22", "team22"])
+def test_additional_debug_tokens_are_case_insensitive(client, token):
+    resp = client.get(f"/v1/shares/{token}")
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["payload"] == _debug_payload(token.upper())
