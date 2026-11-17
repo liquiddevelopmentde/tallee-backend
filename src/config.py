@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 from typing import Optional
 
 load_dotenv()
@@ -21,9 +22,12 @@ TALLEE_SHARE_TOKEN_NUMBERS: str = "23456789"
 TALLEE_SHARE_TOKEN_ALPHABET: str = TALLEE_SHARE_TOKEN_LETTERS + TALLEE_SHARE_TOKEN_NUMBERS
 TALLEE_SHARE_TOKEN_LENGTH: int = 6  # 6 Characters
 DEBUG_TOKENS: tuple[str, ...] = ("DEBUGX", "GRP222", "PAAR22", "TEAM22")
+# Fixtures live next to this file, so the path works locally and in the
+# container (where ./src is mounted at /app) without extra volume mounts.
+_DATA_DIR: Path = Path(__file__).resolve().parent / "data"
 DEBUG_MATCHES: dict[str, str] = {
-    "DEBUGX": "data/debug-match.json",
-    "GRP222": "data/debug-match-group.json",
-    "PAAR22": "data/debug-match-pairs.json",
-    "TEAM22": "data/debug-match-teams.json",
+    "DEBUGX": str(_DATA_DIR / "debug-match.json"),
+    "GRP222": str(_DATA_DIR / "debug-match-group.json"),
+    "PAAR22": str(_DATA_DIR / "debug-match-pairs.json"),
+    "TEAM22": str(_DATA_DIR / "debug-match-teams.json"),
 }
